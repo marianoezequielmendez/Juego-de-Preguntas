@@ -18,27 +18,27 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({ question, cate
       <div className="w-full flex justify-between items-center mb-6">
         <button 
           onClick={onBack}
-          className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors duration-200"
+          className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors duration-200"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           Categorías
         </button>
-        <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-slate-800 border border-slate-700`}>
+        <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-white border border-slate-200`}>
            <div className={`w-6 h-6 flex items-center justify-center`}>{category.icon}</div>
            <span>{category.name}</span>
         </div>
       </div>
 
-      <div className="bg-slate-800/50 border border-slate-700 rounded-2xl w-full min-h-[250px] sm:min-h-[300px] flex items-center justify-center p-6 text-center shadow-lg">
-        <p className="text-2xl md:text-3xl font-medium leading-relaxed text-slate-100">
+      <div className="bg-white border border-slate-200 rounded-2xl w-full min-h-[250px] sm:min-h-[300px] flex items-center justify-center p-6 text-center shadow-xl">
+        <p className="text-2xl md:text-3xl font-medium leading-relaxed text-slate-800">
           {question}
         </p>
       </div>
 
       {progress.total > 0 && (
          <div className="w-full mt-6 text-center">
-            <p className="text-slate-400">{progress.current} / {progress.total}</p>
-            <div className="w-full bg-slate-700 rounded-full h-2 mt-1">
+            <p className="text-slate-500">{progress.current} / {progress.total}</p>
+            <div className="w-full bg-slate-200 rounded-full h-2 mt-1">
                 <div 
                     className={`bg-gradient-to-r ${category.color} h-2 rounded-full transition-all duration-500`} 
                     style={{width: `${(progress.current / progress.total) * 100}%`}}>

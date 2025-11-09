@@ -74,7 +74,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-white to-slate-200 flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white">
       <main className="w-full max-w-2xl mx-auto transition-all duration-300">
         {renderContent()}
       </main>
