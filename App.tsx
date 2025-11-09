@@ -2,58 +2,29 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { CategorySelector } from './components/CategorySelector';
 import { QuestionDisplay } from './components/QuestionDisplay';
-import { LoadingSpinner } from './components/LoadingSpinner';
-import { ErrorDisplay } from './components/ErrorDisplay';
-import { generateQuestionsForCategory } from './services/geminiService';
 import { CATEGORIES } from './constants';
+import { PRELOADED_QUESTIONS } from './questions';
 import type { QuestionCache, Category } from './types';
 
 function App() {
-  const [questionCache, setQuestionCache] = useState<QuestionCache>({});
+  const [questionCache] = useState<QuestionCache>(PRELOADED_QUESTIONS);
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const [shuffledQuestions, setShuffledQuestions] = useState<string[]>([]);
   const [askedCount, setAskedCount] = useState<number>(0);
   const [currentQuestion, setCurrentQuestion] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
   const totalQuestionsInCategory = useMemo(() => {
     if (!currentCategory || !questionCache[currentCategory.id]) return 0;
     return questionCache[currentCategory.id].length;
   }, [currentCategory, questionCache]);
 
-  const selectCategory = useCallback(async (category: Category) => {
-    setError(null);
+  const selectCategory = useCallback((category: Category) => {
     setCurrentCategory(category);
-
-    if (questionCache[category.id]) {
-      const originalQuestions = questionCache[category.id];
-      const newShuffled = [...originalQuestions].sort(() => Math.random() - 0.5);
-      setCurrentQuestion(newShuffled.pop() ?? null);
-      setShuffledQuestions(newShuffled);
-      setAskedCount(1);
-    } else {
-      setIsLoading(true);
-      try {
-        const questions = await generateQuestionsForCategory(category.name);
-        if (questions && questions.length > 0) {
-            setQuestionCache(prev => ({ ...prev, [category.id]: questions }));
-            const newShuffled = [...questions].sort(() => Math.random() - 0.5);
-            setCurrentQuestion(newShuffled.pop() ?? null);
-            setShuffledQuestions(newShuffled);
-            setAskedCount(1);
-        } else {
-            throw new Error("No se pudieron generar preguntas. Intenta de nuevo.");
-        }
-      } catch (e) {
-        console.error(e);
-        const errorMessage = e instanceof Error ? e.message : "Ocurrió un error desconocido.";
-        setError(errorMessage);
-        setCurrentCategory(null);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    const originalQuestions = questionCache[category.id] || [];
+    const newShuffled = [...originalQuestions].sort(() => Math.random() - 0.5);
+    setCurrentQuestion(newShuffled.pop() ?? "No hay preguntas para esta categoría.");
+    setShuffledQuestions(newShuffled);
+    setAskedCount(1);
   }, [questionCache]);
 
   const showNextQuestion = useCallback(() => {
@@ -83,16 +54,9 @@ function App() {
     setCurrentQuestion(null);
     setShuffledQuestions([]);
     setAskedCount(0);
-    setError(null);
   };
 
   const renderContent = () => {
-    if (isLoading) {
-      return <LoadingSpinner categoryName={currentCategory?.name || ''} />;
-    }
-    if (error) {
-        return <ErrorDisplay message={error} onRetry={goBackToCategories} />;
-    }
     if (currentCategory && currentQuestion) {
       return (
         <QuestionDisplay

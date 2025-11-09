@@ -1,5 +1,5 @@
 {
-  "name": "Conversation Starter AI",
+  "name": "App de preguntas",
   "description": "An application that generates random conversation starter questions across various categories using the Gemini API. Select a category, and get a unique question with each click, ensuring no repeats until all questions have been shown.",
   "requestFramePermissions": []
 }
